@@ -1,9 +1,16 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { requireAdmin } from "@/lib/middleware";
+import { getCorsHeaders, handleCorsPreFlight } from "@/lib/cors";
+
+export async function OPTIONS(req: Request) {
+  const origin = req.headers.get("origin");
+  return handleCorsPreFlight(origin);
+}
 
 // GET categories with product count
-export async function GET() {
+export async function GET(req: Request) {
+  const corsHeaders = getCorsHeaders(req);
   try {
     const categories = await prisma.category.findMany({
       orderBy: { createdAt: "desc" },
@@ -24,21 +31,22 @@ export async function GET() {
       }),
     );
 
-    return NextResponse.json(result);
+    return NextResponse.json(result, { headers: corsHeaders });
   } catch (error) {
     console.error(error);
     return NextResponse.json(
       { message: "Error fetching categories" },
-      { status: 500 },
+      { status: 500, headers: corsHeaders },
     );
   }
 }
 
 // POST
 export async function POST(req: Request) {
+  const corsHeaders = getCorsHeaders(req);
   const auth = await requireAdmin(req);
   if ("error" in auth) {
-    return NextResponse.json({ message: auth.error }, { status: auth.status });
+    return NextResponse.json({ message: auth.error }, { status: auth.status, headers: corsHeaders });
   }
 
   try {
@@ -48,7 +56,7 @@ export async function POST(req: Request) {
     if (!name) {
       return NextResponse.json(
         { message: "Name is required" },
-        { status: 400 },
+        { status: 400, headers: corsHeaders },
       );
     }
 
@@ -58,12 +66,12 @@ export async function POST(req: Request) {
       data: { name, slug },
     });
 
-    return NextResponse.json(category, { status: 201 });
+    return NextResponse.json(category, { status: 201, headers: corsHeaders });
   } catch (error) {
     console.error(error);
     return NextResponse.json(
       { message: "Error creating category" },
-      { status: 500 },
+      { status: 500, headers: corsHeaders },
     );
   }
 }

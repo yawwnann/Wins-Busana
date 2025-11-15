@@ -1,28 +1,16 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { hashPassword, comparePassword, generateToken } from "@/lib/auth";
+import { handleCorsPreFlight, getCorsHeaders } from "@/lib/cors";
 
 // Handle OPTIONS for CORS preflight
-export async function OPTIONS() {
-  return new NextResponse(null, {
-    status: 200,
-    headers: {
-      "Access-Control-Allow-Origin": "http://localhost:5173",
-      "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
-      "Access-Control-Allow-Headers": "Content-Type, Authorization",
-      "Access-Control-Allow-Credentials": "true",
-    },
-  });
+export async function OPTIONS(req: Request) {
+  const origin = req.headers.get("origin");
+  return handleCorsPreFlight(origin);
 }
 
-const corsHeaders = {
-  "Access-Control-Allow-Origin": "http://localhost:5173",
-  "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
-  "Access-Control-Allow-Headers": "Content-Type, Authorization",
-  "Access-Control-Allow-Credentials": "true",
-};
-
 export async function POST(req: Request) {
+  const corsHeaders = getCorsHeaders(req);
   const body = await req.json();
   const { email, password, name, type } = body;
 

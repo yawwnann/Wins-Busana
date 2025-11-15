@@ -1,11 +1,18 @@
 import { NextResponse } from "next/server";
 import cloudinary from "@/lib/cloudinary";
 import { requireAdmin } from "@/lib/middleware";
+import { getCorsHeaders, handleCorsPreFlight } from "@/lib/cors";
+
+export async function OPTIONS(req: Request) {
+  const origin = req.headers.get("origin");
+  return handleCorsPreFlight(origin);
+}
 
 export async function POST(request: Request) {
+  const corsHeaders = getCorsHeaders(request);
   const auth = await requireAdmin(request);
   if ("error" in auth) {
-    return NextResponse.json({ message: auth.error }, { status: auth.status });
+    return NextResponse.json({ message: auth.error }, { status: auth.status, headers: corsHeaders });
   }
 
   try {
@@ -15,7 +22,7 @@ export async function POST(request: Request) {
     if (!file) {
       return NextResponse.json(
         { message: "No file provided" },
-        { status: 400 },
+        { status: 400, headers: corsHeaders },
       );
     }
 
@@ -40,12 +47,12 @@ export async function POST(request: Request) {
     return NextResponse.json({
       url: (result as { secure_url: string }).secure_url,
       publicId: (result as { public_id: string }).public_id,
-    });
+    }, { headers: corsHeaders });
   } catch (error) {
     console.error("Upload error:", error);
     return NextResponse.json(
       { message: "Error uploading file" },
-      { status: 500 },
+      { status: 500, headers: corsHeaders },
     );
   }
 }

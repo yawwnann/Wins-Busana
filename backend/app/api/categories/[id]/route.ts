@@ -1,11 +1,18 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { requireAdmin } from "@/lib/middleware";
+import { getCorsHeaders, handleCorsPreFlight } from "@/lib/cors";
 
 type Params = { id: string };
 
+export async function OPTIONS(req: Request) {
+  const origin = req.headers.get("origin");
+  return handleCorsPreFlight(origin);
+}
+
 // GET single category with products
 export async function GET(request: Request, { params }: { params: Params }) {
+  const corsHeaders = getCorsHeaders(request);
   try {
     const { id } = params;
 
@@ -17,7 +24,7 @@ export async function GET(request: Request, { params }: { params: Params }) {
     if (!category) {
       return NextResponse.json(
         { message: "Category not found" },
-        { status: 404 },
+        { status: 404, headers: corsHeaders },
       );
     }
 
@@ -30,21 +37,22 @@ export async function GET(request: Request, { params }: { params: Params }) {
     return NextResponse.json({
       ...category,
       products,
-    });
+    }, { headers: corsHeaders });
   } catch (error) {
     console.error(error);
     return NextResponse.json(
       { message: "Error fetching category" },
-      { status: 500 },
+      { status: 500, headers: corsHeaders },
     );
   }
 }
 
 // UPDATE category
 export async function PUT(request: Request, { params }: { params: Params }) {
+  const corsHeaders = getCorsHeaders(request);
   const auth = await requireAdmin(request);
   if ("error" in auth) {
-    return NextResponse.json({ message: auth.error }, { status: auth.status });
+    return NextResponse.json({ message: auth.error }, { status: auth.status, headers: corsHeaders });
   }
 
   try {
@@ -59,21 +67,22 @@ export async function PUT(request: Request, { params }: { params: Params }) {
       data: { name, slug },
     });
 
-    return NextResponse.json(category);
+    return NextResponse.json(category, { headers: corsHeaders });
   } catch (error) {
     console.error(error);
     return NextResponse.json(
       { message: "Error updating category" },
-      { status: 500 },
+      { status: 500, headers: corsHeaders },
     );
   }
 }
 
 // DELETE category
 export async function DELETE(request: Request, { params }: { params: Params }) {
+  const corsHeaders = getCorsHeaders(request);
   const auth = await requireAdmin(request);
   if ("error" in auth) {
-    return NextResponse.json({ message: auth.error }, { status: auth.status });
+    return NextResponse.json({ message: auth.error }, { status: auth.status, headers: corsHeaders });
   }
 
   try {
@@ -85,12 +94,12 @@ export async function DELETE(request: Request, { params }: { params: Params }) {
 
     return NextResponse.json({
       message: "Category deleted successfully",
-    });
+    }, { headers: corsHeaders });
   } catch (error) {
     console.error(error);
     return NextResponse.json(
       { message: "Error deleting category" },
-      { status: 500 },
+      { status: 500, headers: corsHeaders },
     );
   }
 }
