@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useAuth } from "../contexts/AuthContext";
 import { useTheme } from "../contexts/ThemeContext";
@@ -11,7 +12,7 @@ export default function AdminLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   const pathname = usePathname();
   const { user, logout } = useAuth();
   const { theme, toggleTheme } = useTheme();
@@ -48,9 +49,17 @@ export default function AdminLayout({
 
   return (
     <div className="min-h-screen bg-zinc-50 dark:bg-zinc-900 transition-colors">
+      {/* Mobile Overlay */}
+      {sidebarOpen && (
+        <div
+          className="fixed inset-0 bg-black/50 z-30 lg:hidden"
+          onClick={() => setSidebarOpen(false)}
+        />
+      )}
+
       {/* Sidebar */}
       <aside
-        className={`fixed top-0 left-0 z-40 h-screen transition-transform ${
+        className={`fixed top-0 left-0 z-40 h-screen transition-transform lg:translate-x-0 ${
           sidebarOpen ? "translate-x-0" : "-translate-x-full"
         } bg-white dark:bg-zinc-800 border-r border-zinc-200 dark:border-zinc-700 w-64`}
       >
@@ -58,9 +67,13 @@ export default function AdminLayout({
           {/* Logo */}
           <div className="p-6 border-b border-zinc-200 dark:border-zinc-700">
             <Link href="/admin" className="flex items-center space-x-3">
-              <div className="w-10 h-10 bg-[#5BC0DE] rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold text-xl">WB</span>
-              </div>
+              <Image
+                                  src={theme === "light" ? "/img/logo.png" : "/img/logo-dark.png"}
+                                  alt="Wins Busana Jawa Logo"
+                                  width={40}
+                                  height={40}
+                                  className="w-10 h-10 object-contain transition-transform group-hover:scale-110"
+                              />
               <div>
                 <h1 className="font-bold text-zinc-900 dark:text-white">Admin Panel</h1>
                 <p className="text-xs text-zinc-500 dark:text-zinc-400">Wins Busana Jawa</p>
@@ -122,7 +135,7 @@ export default function AdminLayout({
       </aside>
 
       {/* Main Content */}
-      <div className={`transition-all ${sidebarOpen ? "ml-64" : "ml-0"}`}>
+      <div className={`transition-all lg:ml-64 ${sidebarOpen ? "ml-0" : "ml-0"}`}>
         {/* Top Bar */}
         <header className="sticky top-0 z-30 bg-white dark:bg-zinc-800 border-b border-zinc-200 dark:border-zinc-700 px-6 py-4">
           <div className="flex items-center justify-between">
