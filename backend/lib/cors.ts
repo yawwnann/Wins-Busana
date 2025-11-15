@@ -7,7 +7,7 @@ const allowedOrigins = [
   "https://winsbusana-be.netlify.app",
   "https://winsbusana.netlify.app",
   "https://wins-busana.vercel.app", // Frontend di Vercel
-  "https://wins-busana-backend.vercel.app", // Backend di Vercel (jika berbeda)
+  "https://wins-busana-jogja.vercel.app/", // Backend di Vercel (jika berbeda)
 ];
 
 export function getCorsHeaders(req: Request) {
