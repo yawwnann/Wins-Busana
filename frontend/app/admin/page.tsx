@@ -5,6 +5,14 @@ import AdminLayout from "../components/AdminLayout";
 import ProtectedRoute from "../components/ProtectedRoute";
 import { apiClient } from "@/lib/api-client";
 
+interface Product {
+  id: string;
+}
+
+interface Category {
+  id: string;
+}
+
 export default function AdminDashboard() {
   const [stats, setStats] = useState({
     totalProducts: 0,
@@ -15,8 +23,8 @@ export default function AdminDashboard() {
   const fetchStats = async () => {
     try {
       const [products, categories] = await Promise.all([
-        apiClient.get("/api/products"),
-        apiClient.get("/api/categories"),
+        apiClient.get<Product[]>("/api/products"),
+        apiClient.get<Category[]>("/api/categories"),
       ]);
 
       setStats({

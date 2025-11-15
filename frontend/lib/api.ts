@@ -1,4 +1,4 @@
-const API_URL = (process.env.NEXT_PUBLIC_API_URL || "https://winsbusana-be.netlify.app").replace(/\/$/, "");
+const API_URL = (process.env.NEXT_PUBLIC_API_URL || "https://wins-busana.vercel.app").replace(/\/$/, "");
 
 interface FetchOptions extends RequestInit {
   token?: string;

@@ -46,8 +46,8 @@ export default function ProductsPage() {
   const fetchData = async () => {
     try {
       const [productsData, categoriesData] = await Promise.all([
-        apiClient.get("/api/products"),
-        apiClient.get("/api/categories"),
+        apiClient.get<Product[]>("/api/products"),
+        apiClient.get<Category[]>("/api/categories"),
       ]);
       setProducts(productsData);
       setCategories(categoriesData);

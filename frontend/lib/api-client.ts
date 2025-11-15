@@ -1,4 +1,4 @@
-const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5173";
+const API_URL = (process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000").replace(/\/$/, "");
 
 // Get auth token from localStorage
 const getToken = () => {
@@ -11,7 +11,7 @@ const getToken = () => {
 // API client with auth headers
 export const apiClient = {
   // GET request
-  async get(endpoint: string) {
+  async get<T = unknown>(endpoint: string): Promise<T> {
     const token = getToken();
     const headers: HeadersInit = {
       "Content-Type": "application/json",
@@ -36,7 +36,7 @@ export const apiClient = {
   },
 
   // POST request
-  async post(endpoint: string, body: any) {
+  async post<T = unknown>(endpoint: string, body: Record<string, unknown>): Promise<T> {
     const token = getToken();
     const headers: HeadersInit = {
       "Content-Type": "application/json",
@@ -62,7 +62,7 @@ export const apiClient = {
   },
 
   // PUT request
-  async put(endpoint: string, body: any) {
+  async put<T = unknown>(endpoint: string, body: Record<string, unknown>): Promise<T> {
     const token = getToken();
     const headers: HeadersInit = {
       "Content-Type": "application/json",
@@ -88,7 +88,7 @@ export const apiClient = {
   },
 
   // DELETE request
-  async delete(endpoint: string) {
+  async delete<T = unknown>(endpoint: string): Promise<T> {
     const token = getToken();
     const headers: HeadersInit = {
       "Content-Type": "application/json",
@@ -113,7 +113,7 @@ export const apiClient = {
   },
 
   // Upload file
-  async upload(endpoint: string, file: File) {
+  async upload<T = { url: string; publicId: string }>(endpoint: string, file: File): Promise<T> {
     const token = getToken();
     const formData = new FormData();
     formData.append("file", file);

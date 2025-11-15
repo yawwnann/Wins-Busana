@@ -28,7 +28,7 @@ export default function CategoriesPage() {
 
   const fetchCategories = async () => {
     try {
-      const data = await apiClient.get("/api/categories");
+      const data = await apiClient.get<Category[]>("/api/categories");
       setCategories(data);
     } catch (error) {
       console.error("Error fetching categories:", error);
