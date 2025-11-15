@@ -1,7 +1,16 @@
-const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000";
+const API_URL = (process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000").replace(/\/$/, "");
 
 interface FetchOptions extends RequestInit {
   token?: string;
+}
+
+interface ProductInput {
+  name: string;
+  description?: string | null;
+  price?: number | null;
+  imageUrl?: string | null;
+  url: string;
+  categoryId?: string | null;
 }
 
 export async function apiRequest(
@@ -74,13 +83,13 @@ export const productsAPI = {
     const query = categoryId ? `?categoryId=${categoryId}` : "";
     return apiRequest(`/api/products${query}`);
   },
-  create: (data: any, token: string) =>
+  create: (data: ProductInput, token: string) =>
     apiRequest("/api/products", {
       method: "POST",
       body: JSON.stringify(data),
       token,
     }),
-  update: (id: string, data: any, token: string) =>
+  update: (id: string, data: Partial<ProductInput>, token: string) =>
     apiRequest(`/api/products/${id}`, {
       method: "PUT",
       body: JSON.stringify(data),
