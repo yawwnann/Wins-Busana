@@ -1,4 +1,4 @@
-const API_URL = (process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000").replace(/\/$/, "");
+const API_URL = (process.env.NEXT_PUBLIC_API_URL || "https://winsbusana-be.netlify.app").replace(/\/$/, "");
 
 interface FetchOptions extends RequestInit {
   token?: string;

@@ -3,7 +3,7 @@ import { prisma } from "@/lib/prisma";
 import { requireAdmin } from "@/lib/middleware";
 import { getCorsHeaders, handleCorsPreFlight } from "@/lib/cors";
 
-type Params = { id: string };
+type Params = Promise<{ id: string }>;
 
 export async function OPTIONS(req: Request) {
   const origin = req.headers.get("origin");
@@ -14,7 +14,7 @@ export async function OPTIONS(req: Request) {
 export async function GET(request: Request, { params }: { params: Params }) {
   const corsHeaders = getCorsHeaders(request);
   try {
-    const { id } = params;
+    const { id } = await params;
 
     // Ambil kategori dulu
     const category = await prisma.category.findUnique({
@@ -56,7 +56,7 @@ export async function PUT(request: Request, { params }: { params: Params }) {
   }
 
   try {
-    const { id } = params;
+    const { id } = await params;
     const body = await request.json();
     const { name } = body;
 
@@ -86,7 +86,7 @@ export async function DELETE(request: Request, { params }: { params: Params }) {
   }
 
   try {
-    const { id } = params;
+    const { id } = await params;
 
     await prisma.category.delete({
       where: { id },
