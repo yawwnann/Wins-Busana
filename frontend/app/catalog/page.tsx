@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import Image from "next/image";
 import { productsAPI, categoriesAPI } from "@/lib/api";
@@ -8,8 +8,7 @@ import { Product, Category } from "@/lib/types";
 import ProductCard from "../components/ProductCard";
 import Footer from "../components/Footer";
 
-
-export default function CatalogPage() {
+function CatalogContent() {
   const searchParams = useSearchParams();
   const categoryId = searchParams.get("category");
 
@@ -215,5 +214,19 @@ export default function CatalogPage() {
       </div>
       <Footer />
     </div>
+  );
+}
+
+export default function CatalogPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="min-h-screen bg-white dark:bg-zinc-900 flex items-center justify-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-4 border-[#5BC0DE] border-t-transparent" />
+        </div>
+      }
+    >
+      <CatalogContent />
+    </Suspense>
   );
 }
