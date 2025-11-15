@@ -3,11 +3,8 @@ import { NextResponse } from "next/server";
 // Daftar allowed origins
 const allowedOrigins = [
   "http://localhost:5173",
-  "http://localhost:3000",
-  "https://winsbusana-be.netlify.app",
-  "https://winsbusana.netlify.app",
-  "https://wins-busana.vercel.app", // Frontend di Vercel
-  "https://wins-busana-jogja.vercel.app/", // Backend di Vercel (jika berbeda)
+
+  "https://wins-busana-jogja.vercel.app/", 
 ];
 
 export function getCorsHeaders(req: Request) {
