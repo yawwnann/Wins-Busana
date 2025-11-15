@@ -10,13 +10,18 @@ const allowedOrigins = [
 
 export function getCorsHeaders(req: Request) {
   const origin = req.headers.get("origin");
-  const allowedOrigin = origin && allowedOrigins.includes(origin) ? origin : allowedOrigins[0];
+  
+  // Jika origin ada dan termasuk dalam allowed origins, gunakan origin tersebut
+  // Jika tidak, gunakan wildcard untuk development atau fallback ke origin pertama
+  const allowedOrigin = origin && allowedOrigins.includes(origin) 
+    ? origin 
+    : "*";
   
   return {
     "Access-Control-Allow-Origin": allowedOrigin,
     "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
     "Access-Control-Allow-Headers": "Content-Type, Authorization",
-    "Access-Control-Allow-Credentials": "true",
+    "Access-Control-Allow-Credentials": allowedOrigin !== "*" ? "true" : "false",
   };
 }
 
@@ -24,7 +29,7 @@ export function setCorsHeaders(response: NextResponse, origin?: string | null) {
   // Cek apakah origin ada dalam daftar allowed origins
   const allowedOrigin = origin && allowedOrigins.includes(origin) 
     ? origin 
-    : allowedOrigins[0];
+    : "*";
   
   response.headers.set("Access-Control-Allow-Origin", allowedOrigin);
   response.headers.set(
@@ -35,7 +40,10 @@ export function setCorsHeaders(response: NextResponse, origin?: string | null) {
     "Access-Control-Allow-Headers",
     "Content-Type, Authorization"
   );
-  response.headers.set("Access-Control-Allow-Credentials", "true");
+  response.headers.set(
+    "Access-Control-Allow-Credentials", 
+    allowedOrigin !== "*" ? "true" : "false"
+  );
   return response;
 }
 
