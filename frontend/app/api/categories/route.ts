@@ -1,50 +1,25 @@
 import { NextResponse } from "next/server";
 
-const mockCategories = [
-  {
-    id: "1",
-    name: "Blangkon Jawa Tengah",
-    slug: "blangkon-jawa-tengah",
-    createdAt: new Date().toISOString(),
-    _count: { products: 8 },
-  },
-  {
-    id: "2",
-    name: "Blangkon Yogyakarta",
-    slug: "blangkon-yogyakarta",
-    createdAt: new Date().toISOString(),
-    _count: { products: 6 },
-  },
-  {
-    id: "3",
-    name: "Blangkon Solo",
-    slug: "blangkon-solo",
-    createdAt: new Date().toISOString(),
-    _count: { products: 7 },
-  },
-  {
-    id: "4",
-    name: "Blangkon Batik",
-    slug: "blangkon-batik",
-    createdAt: new Date().toISOString(),
-    _count: { products: 10 },
-  },
-  {
-    id: "5",
-    name: "Blangkon Polos",
-    slug: "blangkon-polos",
-    createdAt: new Date().toISOString(),
-    _count: { products: 5 },
-  },
-  {
-    id: "6",
-    name: "Blangkon Premium",
-    slug: "blangkon-premium",
-    createdAt: new Date().toISOString(),
-    _count: { products: 4 },
-  },
-];
+const API_URL = (process.env.NEXT_PUBLIC_API_URL || "https://wins-busana.vercel.app").replace(/\/$/, "");
 
 export async function GET() {
-  return NextResponse.json(mockCategories);
+  try {
+    // Fetch categories dari backend API
+    const response = await fetch(`${API_URL}/api/categories`, {
+      next: { revalidate: 60 }, // Cache selama 60 detik
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to fetch categories");
+    }
+
+    const categories = await response.json();
+    return NextResponse.json(categories);
+  } catch (error) {
+    console.error("Error fetching categories:", error);
+    return NextResponse.json(
+      { message: "Error fetching categories" },
+      { status: 500 }
+    );
+  }
 }
