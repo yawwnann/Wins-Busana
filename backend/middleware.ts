@@ -4,7 +4,7 @@ import type { NextRequest } from "next/server";
 export function middleware(request: NextRequest) {
   if (request.method === "OPTIONS") {
     const response = NextResponse.json({}, { status: 200 });
-    response.headers.set("Access-Control-Allow-Origin", "https://wins-busana.vercel.app/");
+    response.headers.set("Access-Control-Allow-Origin", "https://wins-busana-jogja.vercel.app");
     response.headers.set(
       "Access-Control-Allow-Methods",
       "GET, POST, PUT, DELETE, OPTIONS"
@@ -18,7 +18,7 @@ export function middleware(request: NextRequest) {
   }
 
   const response = NextResponse.next();
-  response.headers.set("Access-Control-Allow-Origin", "https://wins-busana.vercel.app/");
+  response.headers.set("Access-Control-Allow-Origin", "https://wins-busana-jogja.vercel.app");
   response.headers.set(
     "Access-Control-Allow-Methods",
     "GET, POST, PUT, DELETE, OPTIONS"
