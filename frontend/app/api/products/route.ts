@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 
-const API_URL = (process.env.NEXT_PUBLIC_API_URL || "https://wins-busana.vercel.app").replace(/\/$/, "");
+const API_URL = (process.env.NEXT_PUBLIC_API_URL || "https://wins-busana.vercel.app/").replace(/\/$/, "");
 
 export async function GET(request: Request) {
   try {

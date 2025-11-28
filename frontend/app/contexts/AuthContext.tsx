@@ -3,7 +3,7 @@
 import { createContext, useContext, useState, useEffect, ReactNode } from "react";
 import { useRouter } from "next/navigation";
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5173";
+const API_URL = process.env.NEXT_PUBLIC_API_URL || "https://wins-busana.vercel.app/";
 
 interface User {
   id: string;
