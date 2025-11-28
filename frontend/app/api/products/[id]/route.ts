@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 
 // Backend API URL - should point to your backend deployment
-const API_URL = (process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:3001").replace(/\/$/, "");
+const API_URL = (process.env.NEXT_PUBLIC_BACKEND_URL || "https://wins-busana.vercel.app").replace(/\/$/, "");
 
 export async function GET(
   request: Request,
