@@ -1,4 +1,4 @@
-const API_URL = (process.env.NEXT_PUBLIC_BACKEND_URL || "https://wins-busana.vercel.app").replace(/\/$/, "");
+const API_URL = (process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:3001").replace(/\/$/, "");
 
 // Get auth token from localStorage
 const getToken = () => {
