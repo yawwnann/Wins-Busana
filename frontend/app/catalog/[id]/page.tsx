@@ -17,12 +17,26 @@ export default function ProductDetailPage() {
   useEffect(() => {
     async function fetchProduct() {
       try {
-        const response = await fetch(`/api/products/${params.id}`);
+        const API_URL = process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:3001";
+        console.log("Fetching product from:", `${API_URL}/api/products/${params.id}`);
+        
+        const response = await fetch(`${API_URL}/api/products/${params.id}`, {
+          cache: 'no-store',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+        
+        console.log("Response status:", response.status);
+        
         if (!response.ok) {
+          console.error("Response not OK:", response.status, response.statusText);
           setError(true);
           return;
         }
+        
         const data = await response.json();
+        console.log("Product data:", data);
         setProduct(data);
       } catch (error) {
         console.error("Error fetching product:", error);
