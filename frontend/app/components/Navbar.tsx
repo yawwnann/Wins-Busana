@@ -43,6 +43,12 @@ export default function Navbar() {
             >
               Catalog
             </Link>
+            <Link
+              href="/profile"
+              className="text-zinc-600 dark:text-zinc-300 hover:text-[#5BC0DE] dark:hover:text-[#5BC0DE] transition-colors font-medium"
+            >
+              Profile
+            </Link>
           </div>
 
           {/* Actions - Right */}
@@ -128,6 +134,13 @@ export default function Navbar() {
               className="block px-4 py-2 rounded-lg text-zinc-600 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors"
             >
               Catalog
+            </Link>
+            <Link
+              href="/profile"
+              onClick={() => setMobileMenuOpen(false)}
+              className="block px-4 py-2 rounded-lg text-zinc-600 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors"
+            >
+              Profile
             </Link>
           </div>
         )}
