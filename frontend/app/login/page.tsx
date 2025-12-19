@@ -20,7 +20,10 @@ export default function LoginPage() {
     try {
       await login(email, password);
     } catch (err: unknown) {
-      const errorMessage = err instanceof Error ? err.message : "Login gagal. Periksa email dan password Anda.";
+      const errorMessage =
+        err instanceof Error
+          ? err.message
+          : "Login gagal. Periksa email dan password Anda.";
       setError(errorMessage);
     } finally {
       setLoading(false);

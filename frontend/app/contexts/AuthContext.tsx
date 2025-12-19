@@ -1,9 +1,17 @@
 "use client";
 
-import { createContext, useContext, useState, useEffect, ReactNode } from "react";
+import {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  ReactNode,
+} from "react";
 import { useRouter } from "next/navigation";
 
-const API_URL = (process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:3001").replace(/\/$/, "");
+const API_URL = (
+  process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:3001"
+).replace(/\/$/, "");
 
 interface User {
   id: string;
@@ -46,11 +54,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     try {
       // Decode JWT to get user info (simple decode, not verification)
       const payload = JSON.parse(atob(authToken.split(".")[1]));
-      
+
       // In a real app, you'd fetch user details from API
       // For now, we'll use a mock approach
       // TODO: Add a /api/auth/me endpoint in backend
-      
+
       // Mock user for now - in production, fetch from API
       setUser({
         id: payload.userId,
@@ -91,10 +99,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       localStorage.setItem("token", authToken);
       setToken(authToken);
       await fetchUser(authToken);
-      
+
       router.push("/admin");
     } catch (error: unknown) {
-      const errorMessage = error instanceof Error ? error.message : "Login failed";
+      const errorMessage =
+        error instanceof Error ? error.message : "Login failed";
       throw new Error(errorMessage);
     }
   };
@@ -124,10 +133,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       localStorage.setItem("token", authToken);
       setToken(authToken);
       await fetchUser(authToken);
-      
+
       router.push("/admin");
     } catch (error: unknown) {
-      const errorMessage = error instanceof Error ? error.message : "Registration failed";
+      const errorMessage =
+        error instanceof Error ? error.message : "Registration failed";
       throw new Error(errorMessage);
     }
   };

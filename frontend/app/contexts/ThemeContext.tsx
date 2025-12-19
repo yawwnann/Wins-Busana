@@ -14,10 +14,10 @@ const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 // Get initial theme before mounting
 const getInitialTheme = (): Theme => {
   if (typeof window === "undefined") return "light";
-  
+
   const savedTheme = localStorage.getItem("theme") as Theme;
   if (savedTheme) return savedTheme;
-  
+
   const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
   return prefersDark ? "dark" : "light";
 };
@@ -38,7 +38,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     const newTheme = theme === "light" ? "dark" : "light";
     setTheme(newTheme);
     localStorage.setItem("theme", newTheme);
-    
+
     if (newTheme === "dark") {
       document.documentElement.classList.add("dark");
     } else {
