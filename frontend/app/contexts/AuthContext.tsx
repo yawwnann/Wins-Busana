@@ -93,8 +93,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       await fetchUser(authToken);
       
       router.push("/admin");
-    } catch (error: any) {
-      throw new Error(error.message || "Login failed");
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : "Login failed";
+      throw new Error(errorMessage);
     }
   };
 
@@ -125,8 +126,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       await fetchUser(authToken);
       
       router.push("/admin");
-    } catch (error: any) {
-      throw new Error(error.message || "Registration failed");
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : "Registration failed";
+      throw new Error(errorMessage);
     }
   };
 
